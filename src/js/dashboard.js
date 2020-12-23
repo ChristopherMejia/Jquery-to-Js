@@ -25,10 +25,13 @@
     }
 
     const $actionContainer = document.querySelector('#action');
+    
     //work with each data inside template html
     actionList.data.movies.forEach((movie) =>{
         const HTMLstring = videoItemTemplate(movie);
-        $actionContainer.append(HTMLstring)
+        const html = document.implementation.createHTMLDocument(); //Create a html document in memory
+        html.body.innerHTML = HTMLstring;
+        $actionContainer.append(html.body.children[0])
         console.log(HTMLstring);
     })
 
