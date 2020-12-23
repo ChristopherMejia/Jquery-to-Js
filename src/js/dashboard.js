@@ -24,24 +24,38 @@
         )
     }
 
+    //fuction to create the template html 
+    createTemplate = (htmlString) => {
+      const html = document.implementation.createHTMLDocument(); //Create a html document in memory
+      html.body.innerHTML = htmlString;
+      return html.body.children[0]
+    }
+    //Selector from html index.html
     const $actionContainer = document.querySelector('#action');
-    
+    const $dramaContainer = document.getElementById('drama');
+    const $animationContainer = document.getElementById('animation');
+
     //work with each data inside template html
-    actionList.data.movies.forEach((movie) =>{
+    renderMovieList = (list, $container) => {
+      //actionList.data.movies
+      $container.children[0].remove();
+      list.data.movies.forEach((movie) =>{
         const HTMLstring = videoItemTemplate(movie);
-        const html = document.implementation.createHTMLDocument(); //Create a html document in memory
-        html.body.innerHTML = HTMLstring;
-        $actionContainer.append(html.body.children[0])
-        console.log(HTMLstring);
-    })
+        const movieElement = createTemplate(HTMLstring)
+        $container.append(movieElement)
+        //console.log(HTMLstring);
+      })
+      
+    }
+
+    renderMovieList(actionList, $actionContainer)
+    renderMovieList(dramaList, $dramaContainer )
+    renderMovieList(animationList, $animationContainer )
 
       //const $home = $('.modal');
     const $modal = document.getElementById('modal');
     const $overlay = document.getElementById('overlay');
     const $hideModal = document.getElementById('hide-modal');
-    
-    const $dramaContainer = document.getElementById('drama');
-    const $animationContainer = document.getElementById('animation');
     
     const $featuringContainer = document.getElementById('featuring');
     const $form = document.getElementById('form');
