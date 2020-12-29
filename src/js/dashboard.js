@@ -6,32 +6,58 @@
       return data;
     }
 
+    const BASE_API = 'https://yts.mx/api/v2/';
     const $form = document.getElementById('form');
     const $home = document.getElementById('home');
     const $featuringContainer = document.getElementById('featuring');
 
+    featuringTemplate = (movie) => {
+      return (
+      `
+        <div class="featuring">
+          <div class="featuring-image">
+            <img src="${movie.medium_cover_image}" width="70" height="100" alt="">
+          </div>
+          <div class="featuring-content">
+            <p class="featuring-title">Pelicula encontrada</p>
+            <p class="featuring-album">${movie.title}</p>
+          </div>
+        </div>
+      `
+      )
+    };
 
-    setAttributtes = ($element, attributtes) =>{
-      for (const attributte in attributtes){ //add the attribute value inside element html created. 
-        $element.setAttributte(attributte, attributtes[attributte]);
+    ///function to set attributes of element html
+    function setAttributes ($element, attributes){
+      for (const attribute in attributes){ //add the attribute value inside element html created. 
+        $element.setAttribute(attribute, attributes[attribute]);
       }
     }
 
-    $form.addEventListener('submit',(event) =>{
+    $form.addEventListener('submit',async (event) =>{
       event.preventDefault(); //does not load the page web with form.
       $home.classList.add('search-active');
+      
       const $loader = document.createElement('img');
-      setAttributtes( $loader, {
+      //crate attributes from object 
+      setAttributes( $loader, {
         src: 'src/images/loader.gif',
         height: 50,
         width: 50,
       })
       $featuringContainer.append($loader);
+
+      //select form of html 
+      const data = new FormData($form);
+      const movie = await getData(`${BASE_API}list_movies.json?limit=1&query_term=${data.get('name')}`);
+      const htmlString = featuringTemplate(movie.data.movies[0]);
+      $featuringContainer.innerHTML=htmlString;
+
     })
 
-    const actionList = await getData('https://yts.mx/api/v2/list_movies.json?genre=action')
-    const dramaList = await getData('https://yts.mx/api/v2/list_movies.json?genre=drama')
-    const animationList = await getData('https://yts.mx/api/v2/list_movies.json?genre=animation')
+    const actionList = await getData(`${BASE_API}list_movies.json?genre=action`)
+    const dramaList = await getData(`${BASE_API}list_movies.json?genre=drama`)
+    const animationList = await getData(`${BASE_API}list_movies.json?genre=animation`)
     console.log(actionList, dramaList, animationList);
     
     //Function to sent the item
