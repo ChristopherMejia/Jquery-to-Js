@@ -7,8 +7,12 @@
     }
 
     const $form = document.getElementById('form');
+    const $home = document.getElementById('home');
+
+
     $form.addEventListener('submit',(event) =>{
       event.preventDefault(); //does not load the page web with form.
+      $home.classList.add('search-active');
     })
 
     const actionList = await getData('https://yts.mx/api/v2/list_movies.json?genre=action')
@@ -40,7 +44,7 @@
     //function to add event to each element movie
     addEventClick = ($element) =>{
       $element.addEventListener('click', () => {
-        alert('click')
+        showModal();
       })
     }
     //Selector from html index.html
@@ -71,11 +75,24 @@
     const $hideModal = document.getElementById('hide-modal');
     
     const $featuringContainer = document.getElementById('featuring');
-    const $home = document.getElementById('home');
     
     const $modalTitle = $modal.querySelector('h1');
     const $modalImage = $modal.querySelector('img');
     const $modalDescription = $modal.querySelector('p');
+
+    function showModal() {
+      $overlay.classList.add('active');
+      $modal.style.animation = 'modalIn .8s forwards';
+    }
+
+    $hideModal.addEventListener('click', hideModal);
+
+    function hideModal(){
+      $overlay.classList.remove('active');
+      $modal.style.animation = 'modalOut .8s forwards';
+
+    }
+
 
   })()
 
