@@ -5,6 +5,12 @@
       const data = await response.json()
       return data;
     }
+
+    const $form = document.getElementById('form');
+    $form.addEventListener('submit',(event) =>{
+      event.preventDefault(); //does not load the page web with form.
+    })
+
     const actionList = await getData('https://yts.mx/api/v2/list_movies.json?genre=action')
     const dramaList = await getData('https://yts.mx/api/v2/list_movies.json?genre=drama')
     const animationList = await getData('https://yts.mx/api/v2/list_movies.json?genre=animation')
@@ -30,6 +36,13 @@
       html.body.innerHTML = htmlString;
       return html.body.children[0]
     }
+
+    //function to add event to each element movie
+    addEventClick = ($element) =>{
+      $element.addEventListener('click', () => {
+        alert('click')
+      })
+    }
     //Selector from html index.html
     const $actionContainer = document.querySelector('#action');
     const $dramaContainer = document.getElementById('drama');
@@ -38,12 +51,12 @@
     //work with each data inside template html
     renderMovieList = (list, $container) => {
       //actionList.data.movies
-      $container.children[0].remove();
+      $container.children[0].remove(); //remove the .gif
       list.data.movies.forEach((movie) =>{
         const HTMLstring = videoItemTemplate(movie);
         const movieElement = createTemplate(HTMLstring)
         $container.append(movieElement)
-        //console.log(HTMLstring);
+        addEventClick(movieElement)//selector each movie
       })
       
     }
@@ -58,7 +71,6 @@
     const $hideModal = document.getElementById('hide-modal');
     
     const $featuringContainer = document.getElementById('featuring');
-    const $form = document.getElementById('form');
     const $home = document.getElementById('home');
     
     const $modalTitle = $modal.querySelector('h1');
