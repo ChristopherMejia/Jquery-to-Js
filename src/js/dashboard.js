@@ -49,21 +49,26 @@
 
       //select form of html 
       const data = new FormData($form);
-      const movie = await getData(`${BASE_API}list_movies.json?limit=1&query_term=${data.get('name')}`);
-      const htmlString = featuringTemplate(movie.data.movies[0]);
+      // destructurar un objeto
+      const {
+        data: {
+          movies: pelicula
+        }
+      } = await getData(`${BASE_API}list_movies.json?limit=1&query_term=${data.get('name')}`);
+      const htmlString = featuringTemplate(pelicula[0]);
       $featuringContainer.innerHTML=htmlString;
 
     })
 
-    const actionList = await getData(`${BASE_API}list_movies.json?genre=action`)
-    const dramaList = await getData(`${BASE_API}list_movies.json?genre=drama`)
-    const animationList = await getData(`${BASE_API}list_movies.json?genre=animation`)
+    const {data: { movies: actionList} } = await getData(`${BASE_API}list_movies.json?genre=action`)
+    const {data: { movies: dramaList} } = await getData(`${BASE_API}list_movies.json?genre=drama`)
+    const {data: { movies: animationList} } = await getData(`${BASE_API}list_movies.json?genre=animation`)
     console.log(actionList, dramaList, animationList);
     
     //Function to sent the item
-    videoItemTemplate = (movie) => {
+    videoItemTemplate = (movie, category) => {
         return (
-            `<div class="primaryPlaylistItem">
+            `<div class="primaryPlaylistItem" data-id="${movie.id}" data-category=${category}>
                 <div class="primaryPlaylistItem-image">
                   <img src="${movie.medium_cover_image}">
                 </div>
@@ -84,7 +89,7 @@
     //function to add event to each element movie
     addEventClick = ($element) =>{
       $element.addEventListener('click', () => {
-        showModal();
+        showModal($element);
       })
     }
     //Selector from html index.html
@@ -93,11 +98,11 @@
     const $animationContainer = document.getElementById('animation');
 
     //work with each data inside template html
-    renderMovieList = (list, $container) => {
+    renderMovieList = (list, $container, category) => {
       //actionList.data.movies
       $container.children[0].remove(); //remove the .gif
-      list.data.movies.forEach((movie) =>{
-        const HTMLstring = videoItemTemplate(movie);
+      list.forEach((movie) =>{
+        const HTMLstring = videoItemTemplate(movie, category);
         const movieElement = createTemplate(HTMLstring)
         $container.append(movieElement)
         addEventClick(movieElement)//selector each movie
@@ -105,9 +110,9 @@
       
     }
 
-    renderMovieList(actionList, $actionContainer)
-    renderMovieList(dramaList, $dramaContainer )
-    renderMovieList(animationList, $animationContainer )
+    renderMovieList(actionList, $actionContainer,'action')
+    renderMovieList(dramaList, $dramaContainer, 'drama')
+    renderMovieList(animationList, $animationContainer, 'animation')
 
       //const $home = $('.modal');
     const $modal = document.getElementById('modal');
@@ -119,9 +124,35 @@
     const $modalImage = $modal.querySelector('img');
     const $modalDescription = $modal.querySelector('p');
 
-    showModal= () => {
+    findById = (list, id) =>{
+      return list.find( movie => movie.id === parseInt(id, 10) );
+    }
+
+    findMovie = (id, category) => {
+      switch (category){
+        case 'action': {
+          return findById(actionList, id)
+        }
+        case 'drama' : {
+          return findById(dramaList, id)
+        }
+        default : {
+          return findById(animationList, id)
+        }
+      }
+    }
+
+    showModal= ($element) => {
       $overlay.classList.add('active');
       $modal.style.animation = 'modalIn .8s forwards';
+      const id = $element.dataset.id;
+      const category = $element.dataset.category
+      const data = findMovie(id, category)
+
+      $modalTitle.textContent = data.title;
+      $modalImage.setAttribute('src', data.medium_cover_image); 
+      $modalDescription.textContent = data.description_full;
+
     }
 
     $hideModal.addEventListener('click',() =>{
