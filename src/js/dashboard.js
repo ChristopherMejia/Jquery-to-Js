@@ -59,11 +59,6 @@
       $featuringContainer.innerHTML=htmlString;
 
     })
-
-    const {data: { movies: actionList} } = await getData(`${BASE_API}list_movies.json?genre=action`)
-    const {data: { movies: dramaList} } = await getData(`${BASE_API}list_movies.json?genre=drama`)
-    const {data: { movies: animationList} } = await getData(`${BASE_API}list_movies.json?genre=animation`)
-    console.log(actionList, dramaList, animationList);
     
     //Function to sent the item
     videoItemTemplate = (movie, category) => {
@@ -92,10 +87,6 @@
         showModal($element);
       })
     }
-    //Selector from html index.html
-    const $actionContainer = document.querySelector('#action');
-    const $dramaContainer = document.getElementById('drama');
-    const $animationContainer = document.getElementById('animation');
 
     //work with each data inside template html
     renderMovieList = (list, $container, category) => {
@@ -103,16 +94,35 @@
       $container.children[0].remove(); //remove the .gif
       list.forEach((movie) =>{
         const HTMLstring = videoItemTemplate(movie, category);
-        const movieElement = createTemplate(HTMLstring)
-        $container.append(movieElement)
-        addEventClick(movieElement)//selector each movie
+        const movieElement = createTemplate(HTMLstring);
+        $container.append(movieElement);
+        const image = movieElement.querySelector('img')
+        image.addEventListener('load', (event) => {
+          event.srcElement.classList.add('fadeIn');
+        });
+        addEventClick(movieElement);//selector each movie
       })
       
     }
 
+    const {data: { movies: actionList} } = await getData(`${BASE_API}list_movies.json?genre=action`)
+    //Selector from html index.html
+    const $actionContainer = document.querySelector('#action');
     renderMovieList(actionList, $actionContainer,'action')
+    
+    const {data: { movies: dramaList} } = await getData(`${BASE_API}list_movies.json?genre=drama`)
+    //Selector from html index.html
+    const $dramaContainer = document.getElementById('drama');
     renderMovieList(dramaList, $dramaContainer, 'drama')
+    
+    const {data: { movies: animationList} } = await getData(`${BASE_API}list_movies.json?genre=animation`)
+    //Selector from html index.html
+    const $animationContainer = document.getElementById('animation');
     renderMovieList(animationList, $animationContainer, 'animation')
+    
+    console.log(actionList, dramaList, animationList);
+
+
 
       //const $home = $('.modal');
     const $modal = document.getElementById('modal');
