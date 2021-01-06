@@ -3,7 +3,10 @@
     async function getData(url){
       const response = await fetch(url)
       const data = await response.json()
-      return data;
+      if(data.data.movie_count > 0){
+        return data;
+      }
+      throw new Error('No se encontro ninguna coincidencia');
     }
 
     const BASE_API = 'https://yts.mx/api/v2/';
@@ -46,17 +49,24 @@
         width: 50,
       })
       $featuringContainer.append($loader);
-
       //select form of html 
       const data = new FormData($form);
-      // destructurar un objeto
-      const {
-        data: {
-          movies: pelicula
-        }
-      } = await getData(`${BASE_API}list_movies.json?limit=1&query_term=${data.get('name')}`);
-      const htmlString = featuringTemplate(pelicula[0]);
-      $featuringContainer.innerHTML=htmlString;
+
+      try {
+        // destructurar un objeto
+        const {
+          data: {
+            movies: pelicula
+          }
+        } = await getData(`${BASE_API}list_movies.json?limit=1&query_term=${data.get('name')}`);
+        const htmlString = featuringTemplate(pelicula[0]);
+        $featuringContainer.innerHTML=htmlString;
+        
+      } catch (error) {
+        alert(error.message);
+        $loader.remove();
+        $home.classList.remove('search-active'); 
+      }
 
     })
     
