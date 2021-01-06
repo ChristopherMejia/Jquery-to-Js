@@ -115,25 +115,30 @@
       
     }
 
-    const {data: { movies: actionList} } = await getData(`${BASE_API}list_movies.json?genre=action`)
-    //Selector from html index.html
-    const $actionContainer = document.querySelector('#action');
+    async function cacheExist (category) {
+      const listName = `${category}List`
+      const cacheList = window.sessionStorage.getItem(listName);
+      if(cacheList){
+        return JSON.parse(cacheList)
+      }
+      const {data: { movies: data } } = await getData(`${BASE_API}list_movies.json?genre=${category}`)
+      window.sessionStorage.setItem(listName, JSON.stringify(data))//localStorage
+      return data
+    }
+
+    const actionList = await cacheExist('action')
+    const $actionContainer = document.querySelector('#action');//Selector from html index.html
     renderMovieList(actionList, $actionContainer,'action')
     
-    const {data: { movies: dramaList} } = await getData(`${BASE_API}list_movies.json?genre=drama`)
-    //Selector from html index.html
-    const $dramaContainer = document.getElementById('drama');
+    const dramaList = await cacheExist('drama')
+    const $dramaContainer = document.getElementById('drama');//Selector from html index.html
     renderMovieList(dramaList, $dramaContainer, 'drama')
     
-    const {data: { movies: animationList} } = await getData(`${BASE_API}list_movies.json?genre=animation`)
-    //Selector from html index.html
-    const $animationContainer = document.getElementById('animation');
+    const animationList = await cacheExist('animation')
+    const $animationContainer = document.getElementById('animation');//Selector from html index.html
     renderMovieList(animationList, $animationContainer, 'animation')
     
     console.log(actionList, dramaList, animationList);
-
-
-
       //const $home = $('.modal');
     const $modal = document.getElementById('modal');
     const $overlay = document.getElementById('overlay');
