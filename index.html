@@ -85,72 +85,9 @@
           </ol>
         </div>
         <div class="sidebarPlaylist">
-          <h2 class="sidebarPlaylist-title">Playlist de amigos</h2>
-          <ul class="playlistFriends">
-            <li class="playlistFriends-item">
-              <a href="#">
-                <img src="src/images/covers/echame-la-culpa.jpg" alt="echame la culpa" />
-                <span>
-                  Luis Fonsi
-                </span>
-              </a>
-            </li>
-            <li class="playlistFriends-item">
-              <a href="#">
-                <img src="src/images/covers/echame-la-culpa.jpg" alt="echame la culpa" />
-                <span>
-                  Leonidas Esteban
-                </span>
-              </a>
-            </li>
-            <li class="playlistFriends-item">
-              <a href="#">
-                <img src="src/images/covers/echame-la-culpa.jpg" alt="echame la culpa" />
-                <span>
-                  Luis Fonsi
-                </span>
-              </a>
-            </li>
-            <li class="playlistFriends-item">
-              <a href="#">
-                <img src="src/images/covers/echame-la-culpa.jpg" alt="echame la culpa" />
-                <span>
-                  Leonidas Esteban
-                </span>
-              </a>
-            </li>
-            <li class="playlistFriends-item">
-              <a href="#">
-                <img src="src/images/covers/echame-la-culpa.jpg" alt="echame la culpa" />
-                <span>
-                  Luis Fonsi
-                </span>
-              </a>
-            </li>
-            <li class="playlistFriends-item">
-              <a href="#">
-                <img src="src/images/covers/echame-la-culpa.jpg" alt="echame la culpa" />
-                <span>
-                  Leonidas Esteban
-                </span>
-              </a>
-            </li>
-            <li class="playlistFriends-item">
-              <a href="#">
-                <img src="src/images/covers/echame-la-culpa.jpg" alt="echame la culpa" />
-                <span>
-                  Luis Fonsi
-                </span>
-              </a>
-            </li>
-            <li class="playlistFriends-item">
-              <a href="#">
-                <img src="src/images/covers/echame-la-culpa.jpg" alt="echame la culpa" />
-                <span>
-                  Leonidas Esteban
-                </span>
-              </a>
-            </li>
+          <h2 class="sidebarPlaylist-title">Lista de Amigos</h2>
+          <ul class="playlistFriends" id="friendList">
+              <img src="src/images/loader.gif" width="50" height="50" alt="">
           </ul>
         </div>
       </div>
@@ -212,7 +149,21 @@
       <button class="modal-btn primary" id="hide-modal">Cerrar Modal</button>
     </div>
   </div>
+
+  <div class="overlay" id="overlayUser">
+  </div>
+  <div class="modal" id="modalUser">
+    <h1>Nombre del Usuario</h1>
+    <div class="modal-content">
+      <img src="" alt="" width="170" height="256">
+      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ratione impedit maiores enim alias ex accusantium quasi cum autem, nam, voluptas tenetur laudantium quod! Odit voluptate illo, voluptas vel quia, quae.</p>
+    </div>
+    <div class="modal-buttons">
+      <button class="modal-btn primary" id="hide-modal">Cerrar Modal</button>
+    </div>
+  </div>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="src/js/dashboard.js"></script>
+  <script src="src/js/users.js"></script>
 </body>
 </html>
