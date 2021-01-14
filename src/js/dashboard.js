@@ -185,7 +185,6 @@
       $modal.style.animation = 'modalOut .8s forwards';
     });
 
-
   })()
 
   
