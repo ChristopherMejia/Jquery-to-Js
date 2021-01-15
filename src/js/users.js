@@ -19,7 +19,7 @@
     //create HTML to add DOM
     featuringTemplate = (user) => {
         return(
-        `<li class="playlistFriends-item" >
+        `<li class="playlistFriends-item" data-id="${user.id.name}" >
               <div class="primaryPlaylistItem-image">
                 <img src="${user.picture.medium}">
               </div>
@@ -41,11 +41,37 @@
     
     const $modalUser = document.getElementById('modalUser');
     const $overlayUser = document.getElementById('overlayUser');
+    const $hide = document.getElementById('hide-modal-user');
+    const $modalNameUser = $modalUser.querySelector('h1');
+    const $modalImgUser = $modalUser.querySelector('img');
+    const $modalDescription = $modalUser.querySelector('p')
+
+    findByName = (id, list) => {
+        return list.find(element => element.id.name === id)
+    }
 
     function showModal(userElement){
         $overlayUser.classList.add('active');
         $modalUser.style.animation = 'modalIn .8s forwards';
+        console.log(userElement)
+        
+        const id = userElement.dataset.id;
+        const userFind = findByName(id, data);
+        
+        $modalNameUser.textContent = `${userFind.name.first} ${userFind.name.last}`;
+        $modalImgUser.setAttribute('src', `${userFind.picture.large}`);
+        $modalDescription.innerHTML = `
+        <strong>Email:</strong> ${userFind.email}<br>
+        <strong>Phone:</strong> ${userFind.phone}<br>
+        <strong>Age:</strong> ${userFind.dob.age}<br>
+        <strong>Location:</strong> ${userFind.location.city}. ${userFind.location.state}
+        `;
     }
+
+    $hide.addEventListener('click',() =>{
+        $overlayUser.classList.remove('active');
+        $modalUser.style.animation = 'modalOut .8s forwards';
+    });
 
     function userClick(userElement){
         userElement.addEventListener('click', () => {
